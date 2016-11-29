@@ -1,16 +1,14 @@
 import React from 'react';
 
 class Select extends React.Component {
-
-    selectItem(data) {
-        // this.props.clickHandler(field);
+    selectItem() {
     }
 
     render() {
         return (
-            <select>
-                { this.props.data.forEach(function (item, i) {
-                   return <option onClick={this.selectItem.bind(this, {name: this.props.name, value: item})}>{item}</option>
+            <select className="form-control" onChange={this.props.onChange} >
+                { this.props.data.map(function (item, i) {
+                   return <option value={item}>{item}</option>
                 }, this)
                 }
             </select>

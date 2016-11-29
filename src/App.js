@@ -10,18 +10,68 @@ let columns = {'name': 'Исполнитель', 'song': 'Произведени
 class App extends Component {
     constructor(props) {
         super(props);
-        // this.headerSort = this.headerSort.bind(this);
-        this.state = {songs: getSongs()};
-        // console.log(this.state.songs);
+        this.headerSort = this.headerSort.bind(this);
+        this.selectItem = this.selectItem.bind(this);
+        this.state = {
+            fullListSongs: getSongs(),
+            songs: getSongs(),
+            fields: this.getFilterList(),
+            selectList: this.getSelectList(this.getFilterList(), getSongs()),
+            activePage: 1
+        };
     }
-    headerSort = function (field) {
-        console.log(1);
-        // console.log(this.state);
-        // let sortedSongs = this.state.songs.sort((a, b) => {
-        //     return a[field] - b[field];
-        // });
-        // this.setState({'songs': sortedSongs});
+    headerSort = function (data) {
+        this.setState({'songs': data.songs});
+        this.setState(data.sortedField);
     };
+    getFilterList() {
+        return ['name', 'style', 'year']
+    }
+    checkUniqueItem(param, list) {
+        list.forEach(function (item, i) {
+            if (param == item) {
+                return false;
+            }
+
+            return true;
+        });
+
+        return true;
+    }
+    getUniqueProps(name, props) {
+        let uniqueArray = [];
+        let list = props.map(function (item) {
+            return item[name];
+        });
+
+        list.filter(function (param) {
+            let itemExist = this.checkUniqueItem(param, uniqueArray);
+
+            if (itemExist) {
+                uniqueArray.push(param);
+            }
+        }, this)
+
+        return uniqueArray;
+    }
+    getSelectList(fieldList, songs){
+        let list = [];
+
+        fieldList.forEach(function (item) {
+            list.push({key: item, value: this.getUniqueProps(item, songs)});
+            // return this.getUniqueProps(item, songs);
+        }, this);
+
+        return list;
+    }
+    selectItem(select, e){
+        let resultItems = this.state.fullListSongs.filter(function(value){
+            return value[select] == e.target.value
+        });
+
+        this.setState({'songs': resultItems});
+        this.props.onChange(resultItems);
+    }
     render() {
         return (
             <div className="App">
@@ -33,7 +83,7 @@ class App extends Component {
                     To get started, edit <code>src/App.js</code> and save to reload.
                 </p>
                 <div>
-                    <SearchBlock data={this.state.songs} ></SearchBlock>
+                    <SearchBlock data={this.state.songs} selectFields = {this.state.fields} selectList = {this.state.selectList} onChange={this.selectItem} ></SearchBlock>
                 </div>
                 <div className="">
                     <Grid data={this.state.songs} columns={columns} headerSort={this.headerSort}></Grid>

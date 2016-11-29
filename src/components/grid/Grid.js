@@ -6,7 +6,6 @@ class Grid extends React.Component {
         super(props);
         this.hSort = this.hSort.bind(this);
     }
-
     hSort(field) {
         let sortField = [];
         let status = this.state ? !this.state[field] : false;
@@ -27,8 +26,10 @@ class Grid extends React.Component {
 
             return status ? result : result * -1;
         });
-        this.setState({'songs': sortedSongs});
+
         sortField[field] = status;
+        // this.props.headerSort({songs: sortedSongs, sortedField: sortField})
+        this.setState({'songs': sortedSongs});
         this.setState(sortField);
     };
 
