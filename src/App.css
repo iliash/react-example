@@ -2,22 +2,6 @@
     text-align: center;
 }
 
-.App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 80px;
-}
-
-.App-header {
-    background-color: #222;
-    height: 150px;
-    padding: 20px;
-    color: white;
-}
-
-.App-intro {
-    font-size: large;
-}
-
 .songs-list-wrapper {
 
 }
@@ -40,4 +24,22 @@
 
 .table-head {
     cursor: pointer;
+}
+
+.pagination-select li{
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    list-style-type: none;
+}
+
+.pagination-select .active{
+    background-color: #337ab7;
+    color: #ffffff;
 }

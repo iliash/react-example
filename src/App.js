@@ -14,25 +14,22 @@ class App extends Component {
         this.selectItem = this.selectItem.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
         this.state = {
-            searchSongs: this.getPageItems(1, getSongs()),
+            itemsPerPage: 3,
             songs: getSongs(),
             fields: this.getFilterList(),
             selectList: this.getSelectList(this.getFilterList(), getSongs()),
             search: [],
             activePage: 1,
-            itemsPerPage: 3,
+            searchSongs: this.getPageItems(1, getSongs())
         };
     }
-
     headerSort = function (data) {
         this.setState({'songs': data.songs});
         this.setState(data.sortedField);
     };
-
     getFilterList() {
         return ['name', 'style', 'year']
     }
-
     checkUniqueItem(param, list) {
         let result = true;
         list.forEach(function (item) {
@@ -76,12 +73,11 @@ class App extends Component {
         let state = this.state.search;
         state[select] = e.target.value;
         let songList = this.state.songs;
-
         let songlist = songList.filter(function (value) {
             let count = 0;
             let equalCount = 0;
             for (let item in this.state.search) {
-                if ('All' === this.state.search[item] || value[select] === this.state.search[item]) {
+                if ('All' === this.state.search[item] || value[item] === this.state.search[item]) {
                     equalCount++;
                 }
 
@@ -95,8 +91,8 @@ class App extends Component {
     }
 
     getPageItems(pageNumber, songs) {
-        console.log(songs);
         let limitedSongs = [];
+
         if (pageNumber === 1) {
             for (let item in songs) {
                 if (item < 3) {
@@ -105,12 +101,11 @@ class App extends Component {
             }
         } else {
             for (let item in songs) {
-                if ((pageNumber - 1) * 3 < item && (pageNumber + 1) * 3 > item) {
+                if ((pageNumber - 1) * this.state.itemsPerPage < item && (pageNumber + 1) * this.state.itemsPerPage > item) {
                     limitedSongs.push(songs[item]);
                 }
             }
         }
-
 
         return limitedSongs;
     }
@@ -121,10 +116,14 @@ class App extends Component {
         this.setState({activePage: pageNumber});
     }
 
+    handlerElementsPerPage(number) {
+        this.setState({'itemsPerPage': number});
+        console.log(this);
+    }
+
     render() {
         return (
             <div className="App">
-                {console.log(this.state.searchSongs)}
                 <div className="songs-list-wrapper clearfix">
                     <div className="song-list">
                         <Grid data={this.state.searchSongs} columns={columns} headerSort={this.headerSort}></Grid>
@@ -142,6 +141,19 @@ class App extends Component {
                         pageRangeDisplayed={5}
                         onChange={this.handlePageChange}
                     />
+                </div>
+                <div>
+                    <ul className="pagination-select">
+                        <li className={ 2 === this.state.itemsPerPage ? 'active' : '' }
+                            onClick={this.handlerElementsPerPage.bind(this, 2)}>2
+                        </li>
+                        <li className={ 3 === this.state.itemsPerPage ? 'active' : '' }
+                            onClick={this.handlerElementsPerPage.bind(this, 3)}>3
+                        </li>
+                        <li className={ 4 === this.state.itemsPerPage ? 'active' : '' }
+                            onClick={this.handlerElementsPerPage.bind(this, 4)}>4
+                        </li>
+                    </ul>
                 </div>
             </div>
         );
