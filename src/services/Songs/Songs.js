@@ -29,6 +29,12 @@ let getSongs = function() {
             "song": "No Surprises",
             "style": "Indi",
             "year": 2005
+        },
+        {
+            "name": "Radiohead",
+            "song": "No Surprises",
+            "style": "Indi 2",
+            "year": 2006
         }
     ];
 };
